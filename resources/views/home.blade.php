@@ -5,17 +5,38 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">{{ __('Dashboard') }}</div>
-
+                <div class="card-header"><h1>Medicament Products</h1></div>
+                @if(count($categories) > 0)
                 <div class="card-body">
-                    @if (session('status'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('status') }}
-                        </div>
-                    @endif
 
-                    {{ __('You are logged in!') }}
+                <table  class="table table-hover">
+                    <tbody>
+                    @if(count($categories) > 0)
+                    @foreach($categories as $categorie)
+                        <div class="well">
+                            <tr>
+                                <form method="GET" action="{{ route('showUsercategorieInZone.show') }}">
+                                    @csrf
+                                    <!-- {{ csrf_field() }} -->
+                                    <div class="form-group row">                                            
+                                        <input type="hidden" value={{ $categorie->id }} id="categorieId" class="form-control"
+                                            name="categorieId">
+                                        <button type="submit" class="btn btn-primary btn-block">SELECT</button>
+                                    </div>
+                                </form>
+                            </tr>
+                        </div>
+                    @endforeach
+                    {{$categories->links()}}
+
+                    @else
+                    <h1>categories</h1>    
+                        <h4>No Cateries available at the moment</h4>
+                    @endif
+                    </tbody>
+                </table>                    
                 </div>
+                @endif
             </div>
         </div>
     </div>
