@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class CategoryManagementController extends Controller
 {
@@ -34,7 +36,15 @@ class CategoryManagementController extends Controller
      */
     public function store(Request $request)
     {
-        $this->index();
+        $this->validate($request, [
+            'name' => 'required'
+        ]);
+
+        $categories = new  Category();
+        $categories->name = $request->input('name');
+        $categories->save();
+
+        return redirect('/home')->with('success','Category Created');
     }
 
     /**
@@ -45,8 +55,17 @@ class CategoryManagementController extends Controller
      */
     public function show($id)
     {
-        //
+        $pruductsInCategorie = DB::table('product_categories')
+            ->leftJoin('categories','product_categories.categoryId', '=','categories.id')
+            ->leftJoin('products','product_categories.categoryId', '=','products.id')            
+            ->where('categories.id','=',$id )
+            ->select('products.nameOfProduct','products.id', 'categories.nameOfCategory')
+            ->paginate(15);
+
+        return view("categories.show")->with('pruductsInCategorie', $pruductsInCategorie);
     }
+
+    
 
     /**
      * Show the form for editing the specified resource.

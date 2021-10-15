@@ -35,7 +35,20 @@ Route::prefix('products')->namespace('App\Http\Controllers')->group(function () 
 Route::prefix('categories')->namespace('App\Http\Controllers')->group(function () {
     Route::get('createCategory', 'CategoryManagementController@create')->name('category.create');
     Route::post('storeCategory', 'CategoryManagementController@store')->name('category.store');
-    Route::resource('categoryManagement','CategoryManagementController');
+    Route::post('showCategory', 'CategoryManagementController@showCategory')->name('category.show');
+    //Route::resource('categoryManagement','CategoryManagementController');
 });
+
+
+use App\Http\Controllers\CategoryManagementController;
+
+use App\Http\Controllers\ProductManagementController;
+
+Route::resource('categoryManagement',CategoryManagementController::class);
+
+Route::resources([
+    'categories' => CategoryManagementController::class,
+    'products' => ProductManagementController::class,
+]);
 
 

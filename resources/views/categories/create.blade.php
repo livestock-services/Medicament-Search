@@ -6,17 +6,16 @@
         <div class="col-md-8">
             <div class="card">
                 <div class="card-header">
-                    <h1>Add a Product</h1>
+                    <h1>Add a Category</h1>
                 </div>
                     <div class="card-body">
 
-                        <form method="POST" action="{{route('product.store')}}">
+                        <form method="POST" action="{{route('category.store')}}">
                             @csrf
                             <!-- {{ csrf_field() }} -->
                             <div class="form-outline mb-4">
                                 <h5><label for="name" class="form-label">Name</label></h5>
-                                <input type=" text" id="name" class="form-control" name="name">
-                                
+                                <input type=" text" id="name" class="form-control" name="name">                                
                                 <br>
                             </div>
                             <div class="row justify-content-center">

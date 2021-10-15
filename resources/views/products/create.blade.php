@@ -10,7 +10,7 @@
                 </div>
                     <div class="card-body">
 
-                        <form method="POST" action="{{route('product.store')}}">
+                        <form method="POST" action="{{url('products/store')}}">
                             @csrf
                             <!-- {{ csrf_field() }} -->
                             <div class="form-outline mb-4">
