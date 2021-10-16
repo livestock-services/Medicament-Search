@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
+use App\Models\Image;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Session;
 
 class ProductManagementController extends Controller
 {
@@ -24,7 +28,8 @@ class ProductManagementController extends Controller
      */
     public function create()
     {
-        return view('products.create');
+        $categories = Category::all();
+        return view('products.create')->with("categories",$categories);
     }
 
     /**
@@ -35,6 +40,24 @@ class ProductManagementController extends Controller
      */
     public function store(Request $request)
     {
+        $this->validate($request, [            
+            'nameOfProduct' => 'required',
+            'description' => 'required',
+            'catergoryOfProduct' => 'required',
+            'image' => 'mimes:jpeg,png,jpg,gif,svg|max:5014'            
+        ]);
+
+        if ($image = $request->file('image')) {
+            $imageDestinationPath = 'uploads/';
+            $postImage = date('YmdHis') . "." . $image->getClientOriginalExtension();
+            $image->move($imageDestinationPath, $postImage);
+            //$input['image'] = "$postImage";
+        }
+        
+        $storeProductImage = new Image;
+        $storeProductImage->file_path = $image;
+        $storeProductImage->save();
+        
         $products = Product::all();
         return view('products.show')->with("products",$products);
     }
@@ -47,6 +70,8 @@ class ProductManagementController extends Controller
      */
     public function show($id)
     {
+
+        
         $products = Product::find($id);
         return view('products.show')->with("products",$products);
     }
